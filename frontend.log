@@ -1,0 +1,19 @@
+
+> vite_react_shadcn_ts@0.0.0 dev
+> vite
+
+
+  VITE v5.4.19  ready in 233 ms
+
+  ➜  Local:   http://localhost:8080/
+  ➜  Network: http://192.168.98.49:8080/
+  ➜  press h + enter to show help
+3:29:12 AM [vite] hmr update /src/components/BasketballGallerySection.tsx, /src/index.css
+3:29:12 AM [vite] Pre-transform error: Failed to load url /src/services/api.ts (resolved id: /home/kit/work/2zakazVikings/src/services/api.ts) in /home/kit/work/2zakazVikings/src/components/BasketballGallerySection.tsx. Does the file exist?
+3:29:12 AM [vite] hmr update /src/components/BasketballGallerySection.tsx, /src/index.css
+3:29:12 AM [vite] page reload src/services/api.ts
+3:29:41 AM [vite] page reload src/services/api.ts
+3:29:43 AM [vite] page reload src/services/api.ts
+3:29:43 AM [vite] page reload src/services/api.ts
+3:30:59 AM [vite] page reload backend/public/admin.html
+3:31:08 AM [vite] page reload backend/public/admin.html
