@@ -4,15 +4,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
-import { Phone, MessageSquare, MapPin, Clock, Send } from 'lucide-react';
+import { Phone, MessageSquare, MapPin, Clock, Send, Loader2 } from 'lucide-react';
+import { sendToTelegram, type FormData } from '@/lib/telegram';
 
 const ContactSection = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     phone: '',
     childAge: '',
     message: ''
   });
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -21,35 +24,50 @@ const ContactSection = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Create Telegram message
-    const telegramMessage = `Новая заявка с сайта Викинги:
-    
-Имя: ${formData.name}
-Телефон: ${formData.phone}
-Возраст ребенка: ${formData.childAge}
-Сообщение: ${formData.message}`;
+    // Простая валидация
+    if (!formData.name.trim() || !formData.phone.trim() || !formData.childAge.trim()) {
+      toast({
+        title: "Ошибка",
+        description: "Пожалуйста, заполните все обязательные поля.",
+        variant: "destructive"
+      });
+      return;
+    }
 
-    // Create Telegram link
-    const telegramUrl = `https://t.me/vikings_basketball_bot?start=${encodeURIComponent(telegramMessage)}`;
-    
-    // Open Telegram
-    window.open(telegramUrl, '_blank');
-    
-    toast({
-      title: "Заявка отправлена!",
-      description: "Мы свяжемся с вами в ближайшее время через Telegram.",
-    });
+    setIsLoading(true);
 
-    // Reset form
-    setFormData({
-      name: '',
-      phone: '',
-      childAge: '',
-      message: ''
-    });
+    try {
+      const success = await sendToTelegram(formData);
+      
+      if (success) {
+        toast({
+          title: "Заявка отправлена!",
+          description: "Мы свяжемся с вами в ближайшее время.",
+        });
+
+        // Сброс формы
+        setFormData({
+          name: '',
+          phone: '',
+          childAge: '',
+          message: ''
+        });
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Ошибка отправки",
+        description: "Не удалось отправить заявку. Попробуйте связаться с нами через Telegram.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -145,9 +163,15 @@ const ContactSection = () => {
                     onChange={handleInputChange}
                     className="bg-white/80 focus:bg-white border border-viking-orange/30 rounded-lg px-4 py-2 text-base text-gray-900 placeholder-gray-400 shadow-sm focus:ring-2 focus:ring-viking-orange/40 transition min-h-[60px]"
                   />
-                  <Button type="submit" className="w-full bg-viking-orange hover:bg-viking-red text-white font-bold py-2 rounded-lg mt-2 transition-all flex items-center justify-center gap-2 text-base shadow-md">
-                    <Send className="w-5 h-5" />
-                    Отправить
+                  <Button type="submit" className="w-full bg-viking-orange hover:bg-viking-red text-white font-bold py-2 rounded-lg mt-2 transition-all flex items-center justify-center gap-2 text-base shadow-md" disabled={isLoading}>
+                    {isLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5" />
+                        Отправить
+                      </>
+                    )}
                   </Button>
                 </form>
               </CardContent>
