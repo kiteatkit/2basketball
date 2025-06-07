@@ -19,5 +19,5 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: process.env.NODE_ENV === 'production' ? '/2basketball/' : '/',
+  base: mode === 'production' ? '/2basketball/' : '/',
 }));
