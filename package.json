@@ -3,7 +3,7 @@
     "private": true,
     "version": "1.0.0",
     "type": "module",
-    "homepage": "https://[ваш-username].github.io/2basketball",
+    "homepage": "https://kiteatkit.github.io/2basketball",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
