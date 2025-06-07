@@ -11,13 +11,14 @@ import {
   Medal,
   UsersRound
 } from 'lucide-react';
+import { getAssetPath } from '@/lib/utils';
 
 const trainers = [
   {
     name: "Степан",
     role: "Главный тренер",
     experience: "Многолетний опыт",
-    image: "/trainers/image.png",
+    image: getAssetPath("/trainers/image.png"),
     description: "Неоднократный призёр Суперлиги / Кубок России, играл в сборной U-16 и продолжающий играть на высоком любительском уровне!"
   },
   

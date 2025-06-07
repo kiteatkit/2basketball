@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { getAssetPath } from '@/lib/utils';
 
 const HeroSection = () => {
   return (
@@ -8,7 +9,7 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 text-center relative z-10">
         <div className="max-w-4xl mx-auto animate-fade-in">
           <img 
-            src="/logo.png" 
+            src={getAssetPath("/logo.png")} 
             alt="Викинги Лого" 
             className="h-32 w-32 mx-auto mb-8 animate-bounce-slow"
           />

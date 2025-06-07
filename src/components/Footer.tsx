@@ -1,4 +1,5 @@
 import React from 'react';
+import { getAssetPath } from '@/lib/utils';
 
 const Footer = () => {
   return (
@@ -8,7 +9,7 @@ const Footer = () => {
           <div>
             <div className="flex items-center space-x-3 mb-4">
               <img 
-                src="/logo_red.png" 
+                src={getAssetPath("/logo_red.png")} 
                 alt="Викинги Лого" 
                 className="h-12 w-12"
               />

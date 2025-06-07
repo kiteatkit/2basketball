@@ -1,4 +1,5 @@
 import React from 'react';
+import { getAssetPath } from '@/lib/utils';
 
 const Header = () => {
   return (
@@ -7,7 +8,7 @@ const Header = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <img 
-              src="/logo_red.png " 
+              src={getAssetPath("/logo_red.png")} 
               className="h-12 w-12"
             />
             <div>

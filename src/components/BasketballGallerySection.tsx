@@ -1,14 +1,15 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Video, Camera } from 'lucide-react';
+import { getAssetPath } from '@/lib/utils';
 
 // Примерные фото (замените на свои)
 const photos = [
-  '/gallery/1.jpg',
-  '/gallery/2.jpg',
-  '/gallery/3.jpg',
-  '/gallery/4.jpg',
-  '/gallery/5.jpg',
+  getAssetPath('/gallery/1.jpg'),
+  getAssetPath('/gallery/2.jpg'),
+  getAssetPath('/gallery/3.jpg'),
+  getAssetPath('/gallery/4.jpg'),
+  getAssetPath('/gallery/5.jpg'),
 ];
 
 // SVG фон паркета
