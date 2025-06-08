@@ -100,6 +100,23 @@ const BasketballGallerySection = () => {
     setSelectedPhoto(null);
   };
 
+  const handleTelegramClick = () => {
+    // Пробуем открыть Telegram разными способами
+    const telegramUrls = [
+      'https://t.me/basketballvikings',
+      'tg://resolve?domain=basketballvikings',
+      'https://telegram.me/basketballvikings'
+    ];
+    
+    // Открываем первую ссылку
+    const newWindow = window.open(telegramUrls[0], '_blank', 'noopener,noreferrer');
+    
+    // Если не удалось открыть, пробуем вторую
+    if (!newWindow) {
+      window.location.href = telegramUrls[0];
+    }
+  };
+
   return (
     <section className="relative py-24 overflow-hidden bg-[#f7b97e]">
       <ParquetBackground />
@@ -278,16 +295,14 @@ const BasketballGallerySection = () => {
               Больше видео и фотографий с тренировок в нашем Telegram канале
             </p>
             <div className="flex justify-center">
-              <a 
-                href="https://t.me/basketballvikings" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-viking-orange text-white font-semibold rounded-lg hover:bg-viking-red transition-colors"
+              <button 
+                onClick={handleTelegramClick}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-viking-orange text-white font-semibold rounded-lg hover:bg-viking-red transition-colors cursor-pointer"
               >
                 <Video className="w-5 h-5" />
                 <span>Перейти в Telegram канал</span>
                 <Camera className="w-5 h-5" />
-              </a>
+              </button>
             </div>
           </CardContent>
         </Card>
