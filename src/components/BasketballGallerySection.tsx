@@ -279,10 +279,10 @@ const BasketballGallerySection = () => {
             </p>
             <div className="flex justify-center">
               <a 
-                href="https://telegram.me/basketballvikings" 
+                href="https://t.me/basketballvikings" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-viking-orange text-white font-semibold rounded-lg hover:bg-viking-red transition-colors cursor-pointer no-underline"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-viking-orange text-white font-semibold rounded-lg hover:bg-viking-red transition-colors no-underline"
               >
                 <Video className="w-5 h-5" />
                 <span>Перейти в Telegram канал</span>
