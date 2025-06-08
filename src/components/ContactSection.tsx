@@ -22,6 +22,64 @@ const ContactSection = () => {
     });
   };
 
+  const sendToTelegramBot = async (message: string) => {
+    const BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+    const CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+
+    if (!BOT_TOKEN || !CHAT_ID) {
+      throw new Error('Telegram credentials not configured');
+    }
+
+    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: message,
+        parse_mode: 'HTML'
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Telegram API error: ${errorData.description || 'Unknown error'}`);
+    }
+
+    return await response.json();
+  };
+
+  const sendViaWebhook = async (message: string) => {
+    // Альтернативный способ через webhook сервис (например, через make.com или zapier)
+    const WEBHOOK_URL = import.meta.env.VITE_WEBHOOK_URL;
+    
+    if (!WEBHOOK_URL) {
+      throw new Error('Webhook not configured');
+    }
+
+    const response = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: message,
+        name: formData.name,
+        phone: formData.phone,
+        childAge: formData.childAge,
+        comment: formData.message,
+        timestamp: new Date().toISOString()
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Webhook error');
+    }
+
+    return await response.json();
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -37,41 +95,42 @@ const ContactSection = () => {
 
 📅 Дата подачи: ${new Date().toLocaleDateString('ru-RU')} ${new Date().toLocaleTimeString('ru-RU')}`;
 
-      // Отправляем в Telegram через bot API
-      const BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-      const CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+      let success = false;
 
-      if (BOT_TOKEN && CHAT_ID) {
-        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            chat_id: CHAT_ID,
-            text: message,
-            parse_mode: 'HTML'
-          }),
-        });
-
-        if (response.ok) {
-          toast({
-            title: "Заявка отправлена!",
-            description: "Мы свяжемся с вами в ближайшее время.",
-          });
-          
-          // Сбрасываем форму
-          setFormData({
-            name: '',
-            phone: '',
-            childAge: '',
-            message: ''
-          });
-        } else {
-          throw new Error('Ошибка отправки');
+      // Пытаемся отправить через Telegram Bot API
+      try {
+        await sendToTelegramBot(message);
+        success = true;
+        console.log('Message sent via Telegram Bot API');
+      } catch (error) {
+        console.warn('Telegram Bot API failed:', error);
+        
+        // Пытаемся отправить через webhook
+        try {
+          await sendViaWebhook(message);
+          success = true;
+          console.log('Message sent via webhook');
+        } catch (webhookError) {
+          console.warn('Webhook failed:', webhookError);
         }
+      }
+
+      if (success) {
+        toast({
+          title: "Заявка отправлена!",
+          description: "Мы свяжемся с вами в ближайшее время.",
+        });
+        
+        // Сбрасываем форму
+        setFormData({
+          name: '',
+          phone: '',
+          childAge: '',
+          message: ''
+        });
       } else {
         // Fallback: открываем Telegram с готовым сообщением
+        console.log('Using fallback: opening Telegram app');
         const telegramUrl = `https://t.me/basketballvikings?text=${encodeURIComponent(message)}`;
         window.open(telegramUrl, '_blank');
         
@@ -92,7 +151,8 @@ const ContactSection = () => {
       console.error('Ошибка отправки формы:', error);
       
       // Fallback: открываем Telegram
-      const fallbackMessage = `Новая заявка:
+      const fallbackMessage = `Новая заявка с сайта Викинги:
+      
 Имя: ${formData.name}
 Телефон: ${formData.phone}
 Возраст ребенка: ${formData.childAge}
@@ -103,12 +163,18 @@ const ContactSection = () => {
       
       toast({
         title: "Переход в Telegram",
-        description: "Отправьте подготовленное сообщение в нашем канале.",
+        description: "Произошла ошибка, отправьте сообщение через Telegram.",
       });
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  // Показываем статус конфигурации в dev режиме
+  const BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+  const CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+  const WEBHOOK_URL = import.meta.env.VITE_WEBHOOK_URL;
+  const isConfigured = (!!BOT_TOKEN && !!CHAT_ID) || !!WEBHOOK_URL;
 
   return (
     <section id="contact" className="py-20 bg-white">
@@ -120,6 +186,24 @@ const ContactSection = () => {
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Запишите вашего ребенка на тренировку прямо сейчас
           </p>
+          
+          {/* Показываем статус только в dev режиме */}
+          {import.meta.env.DEV && (
+            <div className="mt-4 p-3 bg-gray-100 rounded-lg max-w-md mx-auto">
+              <p className="text-sm text-gray-600">
+                <strong>Dev Mode:</strong> Integration {isConfigured ? '✅ Configured' : '❌ Not Configured'}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                Bot: {!!BOT_TOKEN && !!CHAT_ID ? '✅' : '❌'} | 
+                Webhook: {!!WEBHOOK_URL ? '✅' : '❌'}
+              </p>
+              {!isConfigured && (
+                <p className="text-xs text-red-600 mt-1">
+                  Check .env file for credentials
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
