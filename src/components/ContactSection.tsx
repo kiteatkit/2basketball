@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
-import { Phone, MessageSquare, MapPin, Clock, Send } from 'lucide-react';
+import { Phone, MessageSquare, MapPin, Clock, Send, ExternalLink } from 'lucide-react';
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -51,7 +51,6 @@ const ContactSection = () => {
   };
 
   const sendViaWebhook = async (message: string) => {
-    // Альтернативный способ через webhook сервис (например, через make.com или zapier)
     const WEBHOOK_URL = import.meta.env.VITE_WEBHOOK_URL;
     
     if (!WEBHOOK_URL) {
@@ -85,15 +84,17 @@ const ContactSection = () => {
     setIsSubmitting(true);
 
     try {
-      // Формируем сообщение для отправки в Telegram
-      const message = `🏀 НОВАЯ ЗАЯВКА С САЙТА ВИКИНГИ
+      // Формируем красивое сообщение для Telegram
+      const message = `🏀 *НОВАЯ ЗАЯВКА С САЙТА ВИКИНГИ*
 
-👤 Имя родителя: ${formData.name}
-📱 Телефон: ${formData.phone}
-👶 Возраст ребенка: ${formData.childAge}
-💬 Комментарий: ${formData.message || 'Не указан'}
+👤 *Имя родителя:* ${formData.name}
+📱 *Телефон:* ${formData.phone}
+👶 *Возраст ребенка:* ${formData.childAge}
+💬 *Комментарий:* ${formData.message || 'Не указан'}
 
-📅 Дата подачи: ${new Date().toLocaleDateString('ru-RU')} ${new Date().toLocaleTimeString('ru-RU')}`;
+📅 *Дата:* ${new Date().toLocaleDateString('ru-RU')} в ${new Date().toLocaleTimeString('ru-RU')}
+
+#заявка #викинги #баскетбол`;
 
       let success = false;
 
@@ -101,23 +102,23 @@ const ContactSection = () => {
       try {
         await sendToTelegramBot(message);
         success = true;
-        console.log('Message sent via Telegram Bot API');
+        console.log('✅ Message sent via Telegram Bot API');
       } catch (error) {
-        console.warn('Telegram Bot API failed:', error);
+        console.warn('❌ Telegram Bot API failed:', error);
         
         // Пытаемся отправить через webhook
         try {
           await sendViaWebhook(message);
           success = true;
-          console.log('Message sent via webhook');
+          console.log('✅ Message sent via webhook');
         } catch (webhookError) {
-          console.warn('Webhook failed:', webhookError);
+          console.warn('❌ Webhook failed:', webhookError);
         }
       }
 
       if (success) {
         toast({
-          title: "Заявка отправлена!",
+          title: "🎉 Заявка отправлена!",
           description: "Мы свяжемся с вами в ближайшее время.",
         });
         
@@ -129,14 +130,23 @@ const ContactSection = () => {
           message: ''
         });
       } else {
-        // Fallback: открываем Telegram с готовым сообщением
-        console.log('Using fallback: opening Telegram app');
+        // Надежный fallback: открываем Telegram с готовым сообщением
         const telegramUrl = `https://t.me/basketballvikings?text=${encodeURIComponent(message)}`;
         window.open(telegramUrl, '_blank');
         
         toast({
-          title: "Переход в Telegram",
-          description: "Отправьте подготовленное сообщение в нашем канале.",
+          title: "📱 Переход в Telegram",
+          description: "Отправьте подготовленное сообщение в нашем канале!",
+          action: (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => window.open(telegramUrl, '_blank')}
+            >
+              <ExternalLink className="w-4 h-4 mr-1" />
+              Открыть Telegram
+            </Button>
+          ),
         });
         
         // Сбрасываем форму
@@ -148,26 +158,47 @@ const ContactSection = () => {
         });
       }
     } catch (error) {
-      console.error('Ошибка отправки формы:', error);
+      console.error('❌ Ошибка отправки формы:', error);
       
-      // Fallback: открываем Telegram
-      const fallbackMessage = `Новая заявка с сайта Викинги:
-      
+      // Финальный fallback
+      const simpleMessage = `🏀 Новая заявка с сайта Викинги:
+
 Имя: ${formData.name}
 Телефон: ${formData.phone}
 Возраст ребенка: ${formData.childAge}
-Сообщение: ${formData.message}`;
+Сообщение: ${formData.message || 'Не указано'}`;
       
-      const telegramUrl = `https://t.me/basketballvikings?text=${encodeURIComponent(fallbackMessage)}`;
+      const telegramUrl = `https://t.me/basketballvikings?text=${encodeURIComponent(simpleMessage)}`;
       window.open(telegramUrl, '_blank');
       
       toast({
-        title: "Переход в Telegram",
-        description: "Произошла ошибка, отправьте сообщение через Telegram.",
+        title: "📱 Перенаправление в Telegram",
+        description: "Отправьте сообщение через Telegram для связи с нами.",
       });
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  // Прямая отправка в Telegram (альтернативная кнопка)
+  const sendDirectToTelegram = () => {
+    if (!formData.name || !formData.phone || !formData.childAge) {
+      toast({
+        title: "⚠️ Заполните обязательные поля",
+        description: "Имя, телефон и возраст ребенка обязательны для заполнения.",
+      });
+      return;
+    }
+
+    const message = `🏀 Заявка с сайта Викинги:
+
+👤 Имя: ${formData.name}
+📱 Телефон: ${formData.phone}
+👶 Возраст: ${formData.childAge}
+💬 Сообщение: ${formData.message || 'Не указано'}`;
+
+    const telegramUrl = `https://t.me/basketballvikings?text=${encodeURIComponent(message)}`;
+    window.open(telegramUrl, '_blank');
   };
 
   // Показываем статус конфигурации в dev режиме
@@ -197,11 +228,6 @@ const ContactSection = () => {
                 Bot: {!!BOT_TOKEN && !!CHAT_ID ? '✅' : '❌'} | 
                 Webhook: {!!WEBHOOK_URL ? '✅' : '❌'}
               </p>
-              {!isConfigured && (
-                <p className="text-xs text-red-600 mt-1">
-                  Check .env file for credentials
-                </p>
-              )}
             </div>
           )}
         </div>
@@ -290,15 +316,30 @@ const ContactSection = () => {
                     onChange={handleInputChange}
                     className="bg-white/80 focus:bg-white border border-viking-orange/30 rounded-lg px-4 py-3 text-base text-gray-900 placeholder-gray-400 shadow-sm focus:ring-2 focus:ring-viking-orange/40 transition min-h-[80px]"
                   />
-                  <Button 
-                    type="submit" 
-                    disabled={isSubmitting}
-                    className="w-full bg-viking-orange hover:bg-viking-red text-white font-bold py-3 rounded-lg mt-4 transition-all flex items-center justify-center gap-2 text-base shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <Send className="w-5 h-5" />
-                    {isSubmitting ? 'Отправка...' : 'Отправить заявку'}
-                  </Button>
+                  
+                  {/* Две кнопки для отправки */}
+                  <div className="grid grid-cols-1 gap-3 mt-6">
+                    <Button 
+                      type="submit" 
+                      disabled={isSubmitting}
+                      className="w-full bg-viking-orange hover:bg-viking-red text-white font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2 text-base shadow-md disabled:opacity-50"
+                    >
+                      <Send className="w-5 h-5" />
+                      {isSubmitting ? 'Отправка...' : 'Отправить заявку'}
+                    </Button>
+                    
+                    <Button 
+                      type="button"
+                      variant="outline"
+                      onClick={sendDirectToTelegram}
+                      className="w-full border-viking-orange text-viking-orange hover:bg-viking-orange hover:text-white py-3 rounded-lg transition-all flex items-center justify-center gap-2 text-base"
+                    >
+                      <MessageSquare className="w-5 h-5" />
+                      Отправить через Telegram
+                    </Button>
+                  </div>
                 </form>
+                
                 <p className="text-sm text-gray-500 mt-4 text-center">
                   * Обязательные поля. Мы свяжемся с вами в течение 24 часов.
                 </p>
