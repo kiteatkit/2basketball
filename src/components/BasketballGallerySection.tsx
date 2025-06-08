@@ -277,24 +277,16 @@ const BasketballGallerySection = () => {
             <p className="text-base md:text-lg text-gray-600 mb-4">
               Больше видео и фотографий с тренировок в нашем Telegram канале
             </p>
-            <div className="flex justify-center space-x-6">
+            <div className="flex justify-center">
               <a 
                 href="https://t.me/basketballvikings" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center p-3 rounded-full transition-all hover:scale-110 hover:bg-viking-orange/10 cursor-pointer"
-                title="Смотреть видео в Telegram"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-viking-orange text-white font-semibold rounded-lg hover:bg-viking-red transition-colors"
               >
-                <Video className="w-6 md:w-8 h-6 md:h-8 text-viking-orange hover:text-viking-red transition-colors" />
-              </a>
-              <a 
-                href="https://t.me/basketballvikings" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center p-3 rounded-full transition-all hover:scale-110 hover:bg-viking-orange/10 cursor-pointer"
-                title="Смотреть фото в Telegram"
-              >
-                <Camera className="w-6 md:w-8 h-6 md:h-8 text-viking-orange hover:text-viking-red transition-colors" />
+                <Video className="w-5 h-5" />
+                <span>Перейти в Telegram канал</span>
+                <Camera className="w-5 h-5" />
               </a>
             </div>
           </CardContent>
