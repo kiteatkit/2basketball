@@ -81,10 +81,14 @@ const BasketballGallerySection = () => {
           (entry.target as HTMLElement).classList.add('in-hoop');
         }
       });
-    }, { threshold: 0.3 });
-    photosRef.current.forEach((el) => {
+    }, { threshold: 0.1 });
+    
+    // Наблюдаем за всеми фото элементами
+    const allPhotos = document.querySelectorAll('.gallery-photo');
+    allPhotos.forEach((el) => {
       if (el) observer.observe(el);
     });
+    
     return () => observer.disconnect();
   }, []);
 
@@ -122,8 +126,7 @@ const BasketballGallerySection = () => {
             {photos.slice(0, 4).map((photo, index) => (
               <div
                 key={index}
-                ref={el => photosRef.current[index] = el}
-                className="relative bg-white rounded-2xl shadow-lg flex items-center justify-center opacity-0 transform scale-95 transition-all duration-700 cursor-pointer hover:scale-105 aspect-[3/4]"
+                className="gallery-photo relative bg-white rounded-2xl shadow-lg flex items-center justify-center opacity-0 transform scale-95 transition-all duration-700 cursor-pointer hover:scale-105 aspect-[3/4]"
                 onClick={() => handlePhotoClick(photo)}
               >
                 <img 
@@ -138,8 +141,7 @@ const BasketballGallerySection = () => {
           {/* Последнее фото по центру */}
           <div className="flex justify-center">
             <div
-              ref={el => photosRef.current[4] = el}
-              className="relative w-32 sm:w-40 bg-white rounded-2xl shadow-lg flex items-center justify-center opacity-0 transform scale-95 transition-all duration-700 cursor-pointer hover:scale-105 aspect-[3/4]"
+              className="gallery-photo relative w-32 sm:w-40 bg-white rounded-2xl shadow-lg flex items-center justify-center opacity-0 transform scale-95 transition-all duration-700 cursor-pointer hover:scale-105 aspect-[3/4]"
               onClick={() => handlePhotoClick(photos[4])}
             >
               <img 
@@ -160,7 +162,7 @@ const BasketballGallerySection = () => {
               {/* Left photo */}
               <div
                 ref={el => photosRef.current[0] = el}
-                className="relative w-32 lg:w-40 h-44 lg:h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
+                className="gallery-photo relative w-32 lg:w-40 h-44 lg:h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
                 onClick={() => handlePhotoClick(photos[0])}
               >
                 <svg className="absolute -top-6 left-1/2 -translate-x-1/2" width="60" height="24" viewBox="0 0 80 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -172,7 +174,7 @@ const BasketballGallerySection = () => {
               {/* Center photo */}
               <div
                 ref={el => photosRef.current[1] = el}
-                className="relative w-40 lg:w-48 h-52 lg:h-64 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-0 scale-100 transition-all duration-700 cursor-pointer hover:scale-105"
+                className="gallery-photo relative w-40 lg:w-48 h-52 lg:h-64 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-0 scale-100 transition-all duration-700 cursor-pointer hover:scale-105"
                 style={{ zIndex: 10 }}
                 onClick={() => handlePhotoClick(photos[1])}
               >
@@ -185,7 +187,7 @@ const BasketballGallerySection = () => {
               {/* Right photo */}
               <div
                 ref={el => photosRef.current[2] = el}
-                className="relative w-32 lg:w-40 h-44 lg:h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
+                className="gallery-photo relative w-32 lg:w-40 h-44 lg:h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
                 onClick={() => handlePhotoClick(photos[2])}
               >
                 <svg className="absolute -top-6 left-1/2 -translate-x-1/2" width="60" height="24" viewBox="0 0 80 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -201,7 +203,7 @@ const BasketballGallerySection = () => {
               {/* Bottom left photo */}
               <div
                 ref={el => photosRef.current[3] = el}
-                className="relative w-32 lg:w-40 h-44 lg:h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
+                className="gallery-photo relative w-32 lg:w-40 h-44 lg:h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
                 onClick={() => handlePhotoClick(photos[3])}
               >
                 <svg className="absolute -top-6 left-1/2 -translate-x-1/2" width="60" height="24" viewBox="0 0 80 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -230,7 +232,7 @@ const BasketballGallerySection = () => {
               {/* Bottom right photo */}
               <div
                 ref={el => photosRef.current[4] = el}
-                className="relative w-32 lg:w-40 h-44 lg:h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
+                className="gallery-photo relative w-32 lg:w-40 h-44 lg:h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
                 onClick={() => handlePhotoClick(photos[4])}
               >
                 <svg className="absolute -top-6 left-1/2 -translate-x-1/2" width="60" height="24" viewBox="0 0 80 32" fill="none" xmlns="http://www.w3.org/2000/svg">
