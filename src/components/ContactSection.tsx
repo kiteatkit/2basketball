@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
-import { Phone, MessageSquare, MapPin, Clock, Send, Loader2 } from 'lucide-react';
+import { MessageSquare, Send, Loader2 } from 'lucide-react';
 import { sendToTelegram } from '@/lib/telegram';
 
 const ContactSection = () => {
@@ -91,27 +91,6 @@ const ContactSection = () => {
                     <div>
                       <div className="font-medium text-gray-800">Telegram</div>
                       <a href="https://t.me/basketballvikings" target="_blank" rel="noopener noreferrer" className="text-viking-orange hover:text-viking-red transition-colors">@basketballvikings</a>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Phone className="w-6 h-6 text-viking-orange" />
-                    <div>
-                      <div className="font-medium text-gray-800">Телефон</div>
-                      <div className="text-gray-600">+7 (XXX) XXX-XX-XX</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <MapPin className="w-6 h-6 text-viking-orange" />
-                    <div>
-                      <div className="font-medium text-gray-800">Адрес</div>
-                      <div className="text-gray-600">ул. Спортивная, 15<br />г. Владивосток</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Clock className="w-6 h-6 text-viking-orange" />
-                    <div>
-                      <div className="font-medium text-gray-800">Время работы</div>
-                      <div className="text-gray-600">Пн, Ср, Пт: 16:00-20:00<br />Сб: 10:00-14:00</div>
                     </div>
                   </div>
                 </div>
