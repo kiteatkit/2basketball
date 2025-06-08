@@ -282,11 +282,10 @@ const BasketballGallerySection = () => {
                 href="https://t.me/basketballvikings" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-viking-orange text-white font-semibold rounded-lg hover:bg-viking-red transition-colors no-underline"
+                className="relative z-50 block px-6 py-3 bg-viking-orange text-white font-semibold rounded-lg hover:bg-viking-red transition-colors text-center"
+                style={{ textDecoration: 'none' }}
               >
-                <Video className="w-5 h-5" />
-                <span>Перейти в Telegram канал</span>
-                <Camera className="w-5 h-5" />
+                Перейти в Telegram канал
               </a>
             </div>
           </CardContent>
