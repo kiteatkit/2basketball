@@ -81,10 +81,14 @@ const BasketballGallerySection = () => {
           (entry.target as HTMLElement).classList.add('in-hoop');
         }
       });
-    }, { threshold: 0.3 });
-    photosRef.current.forEach((el) => {
+    }, { threshold: 0.1 });
+    
+    // Наблюдаем за всеми фото элементами
+    const allPhotos = document.querySelectorAll('.gallery-photo');
+    allPhotos.forEach((el) => {
       if (el) observer.observe(el);
     });
+    
     return () => observer.disconnect();
   }, []);
 
@@ -97,11 +101,13 @@ const BasketballGallerySection = () => {
   };
 
   return (
-    <section className="relative py-24 overflow-x-hidden bg-[#f7b97e]">
+    <section className="relative py-24 overflow-hidden bg-[#f7b97e]">
       <ParquetBackground />
       <div className="container mx-auto px-4 relative z-10">
-        <h2 className="text-4xl md:text-5xl font-russo mb-10 text-center text-viking-orange drop-shadow-lg">Галерея</h2>
-        <div className="flex gap-8 items-end mb-8 justify-center">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-russo mb-8 md:mb-10 text-center text-viking-orange drop-shadow-lg">Галерея</h2>
+        
+        {/* Баскетбольные мячи - скрыть на мобильных */}
+        <div className="hidden md:flex gap-8 items-end mb-8 justify-center">
           {[0, 1, 2].map((i) => (
             <div
               key={i}
@@ -113,26 +119,62 @@ const BasketballGallerySection = () => {
             </div>
           ))}
         </div>
-        <div className="overflow-x-auto scrollbar-hide">
+
+        {/* Мобильная версия - простая сетка */}
+        <div className="block md:hidden">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6">
+            {photos.slice(0, 4).map((photo, index) => (
+              <div
+                key={index}
+                className="gallery-photo relative bg-white rounded-2xl shadow-lg flex items-center justify-center opacity-0 transform scale-95 transition-all duration-700 cursor-pointer hover:scale-105 aspect-[3/4]"
+                onClick={() => handlePhotoClick(photo)}
+              >
+                <img 
+                  src={photo} 
+                  alt="basketball gallery" 
+                  className="rounded-xl w-full h-full object-cover shadow-md" 
+                  draggable={false} 
+                />
+              </div>
+            ))}
+          </div>
+          {/* Последнее фото по центру */}
+          <div className="flex justify-center">
+            <div
+              className="gallery-photo relative w-32 sm:w-40 bg-white rounded-2xl shadow-lg flex items-center justify-center opacity-0 transform scale-95 transition-all duration-700 cursor-pointer hover:scale-105 aspect-[3/4]"
+              onClick={() => handlePhotoClick(photos[4])}
+            >
+              <img 
+                src={photos[4]} 
+                alt="basketball gallery" 
+                className="rounded-xl w-full h-full object-cover shadow-md" 
+                draggable={false} 
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Десктопная версия - оригинальный дизайн */}
+        <div className="hidden md:block">
           <div className="flex flex-col gap-8 pb-8 relative" style={{ minHeight: 400 }}>
             {/* Top row with 3 photos */}
             <div className="flex gap-4 justify-center items-end">
               {/* Left photo */}
               <div
                 ref={el => photosRef.current[0] = el}
-                className="relative w-40 h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
+                className="gallery-photo relative w-32 lg:w-40 h-44 lg:h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
                 onClick={() => handlePhotoClick(photos[0])}
               >
                 <svg className="absolute -top-6 left-1/2 -translate-x-1/2" width="60" height="24" viewBox="0 0 80 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <ellipse cx="40" cy="24" rx="28" ry="8" fill="#FF6A33" fillOpacity="0.18" />
                   <ellipse cx="40" cy="24" rx="20" ry="6" fill="#FF4500" fillOpacity="0.12" />
                 </svg>
-                <img src={photos[0]} alt="basketball gallery" className="rounded-2xl w-36 h-48 object-cover z-10 shadow-md" draggable={false} />
+                <img src={photos[0]} alt="basketball gallery" className="rounded-2xl w-28 lg:w-36 h-36 lg:h-48 object-cover z-10 shadow-md" draggable={false} />
               </div>
               {/* Center photo */}
               <div
                 ref={el => photosRef.current[1] = el}
-                className="relative w-48 h-64 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-0 scale-100 transition-all duration-700 cursor-pointer hover:scale-105"
+                className="gallery-photo relative w-40 lg:w-48 h-52 lg:h-64 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-0 scale-100 transition-all duration-700 cursor-pointer hover:scale-105"
                 style={{ zIndex: 10 }}
                 onClick={() => handlePhotoClick(photos[1])}
               >
@@ -140,40 +182,40 @@ const BasketballGallerySection = () => {
                   <ellipse cx="40" cy="24" rx="28" ry="8" fill="#FF6A33" fillOpacity="0.18" />
                   <ellipse cx="40" cy="24" rx="20" ry="6" fill="#FF4500" fillOpacity="0.12" />
                 </svg>
-                <img src={photos[1]} alt="basketball gallery" className="rounded-2xl w-44 h-56 object-cover z-10 shadow-md" draggable={false} />
+                <img src={photos[1]} alt="basketball gallery" className="rounded-2xl w-36 lg:w-44 h-44 lg:h-56 object-cover z-10 shadow-md" draggable={false} />
               </div>
               {/* Right photo */}
               <div
                 ref={el => photosRef.current[2] = el}
-                className="relative w-40 h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
+                className="gallery-photo relative w-32 lg:w-40 h-44 lg:h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
                 onClick={() => handlePhotoClick(photos[2])}
               >
                 <svg className="absolute -top-6 left-1/2 -translate-x-1/2" width="60" height="24" viewBox="0 0 80 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <ellipse cx="40" cy="24" rx="28" ry="8" fill="#FF6A33" fillOpacity="0.18" />
                   <ellipse cx="40" cy="24" rx="20" ry="6" fill="#FF4500" fillOpacity="0.12" />
                 </svg>
-                <img src={photos[2]} alt="basketball gallery" className="rounded-2xl w-36 h-48 object-cover z-10 shadow-md" draggable={false} />
+                <img src={photos[2]} alt="basketball gallery" className="rounded-2xl w-28 lg:w-36 h-36 lg:h-48 object-cover z-10 shadow-md" draggable={false} />
               </div>
             </div>
 
             {/* Bottom row with 2 photos */}
-            <div className="flex justify-between px-8 items-center">
+            <div className="flex justify-between px-4 lg:px-8 items-center">
               {/* Bottom left photo */}
               <div
                 ref={el => photosRef.current[3] = el}
-                className="relative w-40 h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
+                className="gallery-photo relative w-32 lg:w-40 h-44 lg:h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
                 onClick={() => handlePhotoClick(photos[3])}
               >
                 <svg className="absolute -top-6 left-1/2 -translate-x-1/2" width="60" height="24" viewBox="0 0 80 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <ellipse cx="40" cy="24" rx="28" ry="8" fill="#FF6A33" fillOpacity="0.18" />
                   <ellipse cx="40" cy="24" rx="20" ry="6" fill="#FF4500" fillOpacity="0.12" />
                 </svg>
-                <img src={photos[3]} alt="basketball gallery" className="rounded-2xl w-36 h-48 object-cover z-10 shadow-md" draggable={false} />
+                <img src={photos[3]} alt="basketball gallery" className="rounded-2xl w-28 lg:w-36 h-36 lg:h-48 object-cover z-10 shadow-md" draggable={false} />
               </div>
 
               {/* Basketball Hoop */}
-              <div className="relative w-48 h-56 flex items-end justify-center">
-                <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform translate-y-8">
+              <div className="relative w-32 lg:w-48 h-44 lg:h-56 flex items-end justify-center">
+                <svg width="100" height="100" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform translate-y-8 lg:w-[120px] lg:h-[120px]">
                   {/* Backboard */}
                   <rect x="20" y="20" width="80" height="60" rx="4" fill="#FF6A33" fillOpacity="0.2" stroke="#FF4500" strokeWidth="2"/>
                   {/* Hoop */}
@@ -190,14 +232,14 @@ const BasketballGallerySection = () => {
               {/* Bottom right photo */}
               <div
                 ref={el => photosRef.current[4] = el}
-                className="relative w-40 h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
+                className="gallery-photo relative w-32 lg:w-40 h-44 lg:h-56 bg-white rounded-3xl shadow-xl flex-shrink-0 flex items-center justify-center opacity-0 transform -translate-y-3 scale-95 transition-all duration-700 cursor-pointer hover:scale-105"
                 onClick={() => handlePhotoClick(photos[4])}
               >
                 <svg className="absolute -top-6 left-1/2 -translate-x-1/2" width="60" height="24" viewBox="0 0 80 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <ellipse cx="40" cy="24" rx="28" ry="8" fill="#FF6A33" fillOpacity="0.18" />
                   <ellipse cx="40" cy="24" rx="20" ry="6" fill="#FF4500" fillOpacity="0.12" />
                 </svg>
-                <img src={photos[4]} alt="basketball gallery" className="rounded-2xl w-36 h-48 object-cover z-10 shadow-md" draggable={false} />
+                <img src={photos[4]} alt="basketball gallery" className="rounded-2xl w-28 lg:w-36 h-36 lg:h-48 object-cover z-10 shadow-md" draggable={false} />
               </div>
             </div>
           </div>
@@ -228,16 +270,30 @@ const BasketballGallerySection = () => {
 
       <div className="mt-12 text-center">
         <Card className="max-w-xl mx-auto border-viking-orange/20">
-          <CardContent className="p-8">
+          <CardContent className="p-6 md:p-8">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <h3 className="text-2xl font-bold text-gray-800">Следите за нами</h3>
+              <h3 className="text-xl md:text-2xl font-bold text-gray-800">Следите за нами</h3>
             </div>
-            <p className="text-lg text-gray-600 mb-4">
+            <p className="text-base md:text-lg text-gray-600 mb-4">
               Больше видео и фотографий с тренировок в нашем Telegram канале
             </p>
             <div className="flex justify-center space-x-6">
-              <Video className="w-8 h-8 text-viking-orange" />
-              <Camera className="w-8 h-8 text-viking-orange" />
+              <a 
+                href="https://t.me/basketballvikings" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="transition-transform hover:scale-110 cursor-pointer"
+              >
+                <Video className="w-6 md:w-8 h-6 md:h-8 text-viking-orange hover:text-viking-red transition-colors" />
+              </a>
+              <a 
+                href="https://t.me/basketballvikings" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="transition-transform hover:scale-110 cursor-pointer"
+              >
+                <Camera className="w-6 md:w-8 h-6 md:h-8 text-viking-orange hover:text-viking-red transition-colors" />
+              </a>
             </div>
           </CardContent>
         </Card>
