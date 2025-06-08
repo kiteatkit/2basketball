@@ -282,7 +282,8 @@ const BasketballGallerySection = () => {
                 href="https://t.me/basketballvikings" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="transition-transform hover:scale-110 cursor-pointer"
+                className="inline-flex items-center justify-center p-3 rounded-full transition-all hover:scale-110 hover:bg-viking-orange/10 cursor-pointer"
+                title="Смотреть видео в Telegram"
               >
                 <Video className="w-6 md:w-8 h-6 md:h-8 text-viking-orange hover:text-viking-red transition-colors" />
               </a>
@@ -290,7 +291,8 @@ const BasketballGallerySection = () => {
                 href="https://t.me/basketballvikings" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="transition-transform hover:scale-110 cursor-pointer"
+                className="inline-flex items-center justify-center p-3 rounded-full transition-all hover:scale-110 hover:bg-viking-orange/10 cursor-pointer"
+                title="Смотреть фото в Telegram"
               >
                 <Camera className="w-6 md:w-8 h-6 md:h-8 text-viking-orange hover:text-viking-red transition-colors" />
               </a>
