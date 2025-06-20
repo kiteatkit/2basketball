@@ -9,7 +9,7 @@
         "preview": "vite preview",
         "deploy": "gh-pages -d dist",
         "build": "vite build",
-        "dev": "webpack serve --mode development",
+        "dev": "vite",
         "start": "npm run dev"
     },
     "dependencies": {

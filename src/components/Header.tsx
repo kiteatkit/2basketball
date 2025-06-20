@@ -19,6 +19,7 @@ const Header = () => {
           <nav className="hidden md:flex space-x-8">
             <a href="#home" className="text-white hover:text-viking-orange transition-colors">Главная</a>
             <a href="#about" className="text-white hover:text-viking-orange transition-colors">О нас</a>
+            <a href="#achievements" className="text-white hover:text-viking-orange transition-colors">Достижения</a>
             <a href="#documents" className="text-white hover:text-viking-orange transition-colors">Документы</a>
             <a href="#contact" className="text-white hover:text-viking-orange transition-colors">Контакты</a>
           </nav>

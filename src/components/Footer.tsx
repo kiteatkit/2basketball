@@ -28,6 +28,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li><a href="#home" className="text-gray-400 hover:text-white transition-colors">Главная</a></li>
               <li><a href="#about" className="text-gray-400 hover:text-white transition-colors">О нас</a></li>
+              <li><a href="#achievements" className="text-gray-400 hover:text-white transition-colors">Достижения</a></li>
               <li><a href="#documents" className="text-gray-400 hover:text-white transition-colors">Документы</a></li>
               <li><a href="#contact" className="text-gray-400 hover:text-white transition-colors">Контакты</a></li>
             </ul>
@@ -38,6 +39,17 @@ const Footer = () => {
             <div className="space-y-2">
               <a href="https://t.me/basketballvikings" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors">
                 <span>Telegram: @basketballvikings</span>
+              </a>
+              
+              {/* Тестовая кнопка для проверки */}
+              <a 
+                href="https://t.me/basketballvikings" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block px-4 py-2 bg-viking-orange text-white font-semibold rounded-lg hover:bg-viking-red transition-colors text-center mt-2"
+                style={{ textDecoration: 'none' }}
+              >
+                ТЕСТ: Перейти в Telegram
               </a>
             </div>
           </div>
